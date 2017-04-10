@@ -27,15 +27,29 @@ class Form extends React.Component {
 }
 
 class SubmitButton extends React.Component {
+  static contextTypes = {
+    onEnter: React.PropTypes.func.isRequired
+  };
+
   render() {
-    return <button>{this.props.children}</button>
+    return <button onClick={this.context.onEnter}>{this.props.children}</button>
   }
 }
 
 class TextInput extends React.Component {
+
+  static contextTypes = {
+    onEnter: React.PropTypes.func.isRequired
+  };
+  
   render() {
     return (
       <input
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            this.context.onEnter();
+          }
+        }}
         type="text"
         name={this.props.name}
         placeholder={this.props.placeholder}
@@ -48,6 +62,16 @@ class App extends React.Component {
   handleSubmit = () => {
     alert('YOU WIN!')
   }
+
+  static childContextTypes = {
+    onEnter: React.PropTypes.func.isRequired
+  };
+
+  getChildContext() {
+    return {onEnter: this.handleSubmit};
+  }
+
+  
 
   render() {
     return (

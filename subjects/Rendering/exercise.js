@@ -29,9 +29,40 @@ const DATA = {
 }
 
 function Menu() {
+  const types = [];
+  DATA.items.forEach((i) =>{
+    if (types.find((t) => t === i.type) === undefined) { types.push(i.type); }
+  });
+  
+  let filter = types[0];
+  function doFilter(e){
+    filter = e.target.value;
+  }
+  const drop = <select onChange={doFilter}>
+      {types.map((t, index) => {
+        return <option value={t} key={index}>{t}</option>
+      })}
+  </select>
+
+  let items = filterItems();
+
+  function filterItems() {
+    return DATA.items.filter((i) => {
+        return i.type === filter;
+      }).sort(sortBy('name'))
+      .map((i) => {
+        return <li key={i.id}>{i.name}</li>;
+      });    
+  }
+
   return (
     <div>
-      Open the console, you have failing tests.
+      {/*Open the console, you have failing tests.*/}
+      {drop}
+      <h1>{DATA.title}</h1>
+      <ul>
+        {filterItems()}
+      </ul>
     </div>
   )
 }

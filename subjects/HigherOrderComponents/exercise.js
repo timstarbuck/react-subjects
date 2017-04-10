@@ -8,8 +8,29 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 
-const withMousePosition = (Component) => {
-  return Component
+// This is the Higher Order Component
+// It contains the knowledge of what the mouse is doing and tracks 
+// the mouse position within its state. It then passes the mouse position to the contained component.
+const withMousePosition = (Comp) => {
+
+  return class extends React.Component {
+    state = {
+      mouse: {x: 10, y: 10}
+    }
+
+    handleMouseMove = ((e) => {
+      this.setState({mouse: {x: e.clientX, y: e.clientY}});
+    });
+
+    render() {
+      return (
+      <div onMouseMove={this.handleMouseMove}>
+        <Comp {...this.props} mouse={this.state.mouse}/>
+      </div>
+      )
+    }
+
+  }
 }
 
 class App extends React.Component {

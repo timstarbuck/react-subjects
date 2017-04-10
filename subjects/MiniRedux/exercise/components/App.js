@@ -3,6 +3,7 @@ import connect from '../mini-redux/connect'
 
 class App extends React.Component {
   increment = () => {
+    // debugger;
     this.props.dispatch({ type: 'INCREMENT' })
   }
 

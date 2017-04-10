@@ -35,10 +35,42 @@ styles.panel = {
 }
 
 class Tabs extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedCountry: this.props.data[0]
+    };
+  }    
+  // state = {
+  //   selectedCountry: this.props.data[0]
+  // }
+
+// only called when props update
+  componentWillReceiveProps = ((nextProps) => {
+    console.log(nextProps);
+    if (nextProps.data) {
+      this.setState({selectedCountry: nextProps.data[0]});
+    }
+  });
+
   render() {
     return (
       <div className="Tabs">
-        <div className="Tab" style={styles.activeTab}>
+        { this.state.selectedCountry && (
+          this.props.data.map((c) => {
+            return <div className="Tab" key={c.id}
+                        onClick={(e) => this.setState({selectedCountry: c})}
+                        style={c.name === this.state.selectedCountry.name ? styles.activeTab : styles.tab}>
+                      {c.name}
+                    </div>
+          })
+        )
+        }
+        <div className="TabPanel" style={styles.panel}>
+          {this.state.selectedCountry ? this.state.selectedCountry.description : ''}
+        </div>
+
+        {/*<div className="Tab" style={styles.activeTab}>
           Active
         </div>
         <div className="Tab" style={styles.tab}>
@@ -46,7 +78,7 @@ class Tabs extends React.Component {
         </div>
         <div className="TabPanel" style={styles.panel}>
           Panel
-        </div>
+        </div>*/}
       </div>
     )
   }

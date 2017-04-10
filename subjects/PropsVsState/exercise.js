@@ -25,31 +25,31 @@ class Tabs extends React.Component {
     data: React.PropTypes.array.isRequired
   }
 
-  state = {
-    activeTabIndex: 0
-  }
+  // state = {
+  //   activeTabIndex: 0
+  // }
 
-  handleTabClick(activeTabIndex) {
-    this.setState({ activeTabIndex })
-  }
+  // handleTabClick(activeTabIndex) {
+  //   this.setState({ activeTabIndex })
+  // }
 
   renderTabs() {
     return this.props.data.map((tab, index) => {
-      const style = this.state.activeTabIndex === index ?
+      const style = this.props.activeTabIndex === index ?
         styles.activeTab : styles.tab
       return (
         <div
           className="Tab"
           key={tab.name}
           style={style}
-          onClick={() => this.handleTabClick(index)}
+          onClick={() => this.props.handleIndexChange(index)}
         >{tab.name}</div>
       )
     })
   }
 
   renderPanel() {
-    const tab = this.props.data[this.state.activeTabIndex]
+    const tab = this.props.data[this.props.activeTabIndex]
     return (
       <div>
         <p>{tab.description}</p>
@@ -72,16 +72,21 @@ class Tabs extends React.Component {
 }
 
 class App extends React.Component {
+  state = {
+    activeTabIndex: 0
+  }
+
   render() {
     return (
       <div>
         <h1>Props v. State</h1>
-        <Tabs ref="tabs" data={this.props.tabs}/>
+        <Tabs ref="tabs" data={this.props.tabs} activeTabIndex={this.state.activeTabIndex} 
+                    handleIndexChange={(e) => this.setState({activeTabIndex: e}) }/>
       </div>
     )
   }
 }
 
-ReactDOM.render(<App tabs={data}/>, document.getElementById('app'), function () {
+ReactDOM.render(<App tabs={data} />, document.getElementById('app'), function () {
   require('./tests').run(this)
 })

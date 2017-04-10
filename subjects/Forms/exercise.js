@@ -20,6 +20,22 @@ import ReactDOM from 'react-dom'
 import serializeForm from 'form-serialize'
 
 class CheckoutForm extends React.Component {
+  state = {
+    billingName: '',
+    billingState: '',
+    isSame: false,
+    shipName: '',
+    shipState: ''
+  };
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log(`bill name = ${this.state.billingName}`);
+    console.log(`bill state = ${this.state.billingState}`);
+    console.log(`ship name = ${this.state.isSame ? this.state.billingName : this.state.shipName}`);
+    console.log(`ship state = ${this.state.isSame ? this.state.billingState : this.state.shipState}`);
+  }
+
   render() {
     return (
       <div>
@@ -28,28 +44,37 @@ class CheckoutForm extends React.Component {
           <fieldset>
             <legend>Billing Address</legend>
             <p>
-              <label>Billing Name: <input type="text"/></label>
+              <label>Billing Name: <input type="text" onChange={(e) => this.setState({billingName: e.target.value})}/></label>
             </p>
             <p>
-              <label>Billing State: <input type="text" size="2"/></label>
+              <label>Billing State: <input type="text" size="2" onChange={(e) => this.setState({billingState: e.target.value.toUpperCase()})}/></label>
             </p>
           </fieldset>
 
           <br/>
 
           <fieldset>
-            <label><input type="checkbox"/> Same as billing</label>
+            <label><input type="checkbox" onChange={(e) => this.setState({isSame: e.target.checked})}/> Same as billing</label>
             <legend>Shipping Address</legend>
             <p>
-              <label>Shipping Name: <input type="text"/></label>
+              <label>Shipping Name: <input type="text" onChange={(e) => {
+                                                          this.setState({shipName: e.target.value});
+                                                          }}
+                                                          disabled={this.state.isSame}
+                                          value={this.state.isSame ? this.state.billingName : this.state.shipName}/></label>
             </p>
             <p>
-              <label>Shipping State: <input type="text" size="2"/></label>
+              <label>Shipping State: <input type="text" size="2" onChange={(e) => { 
+                                                                  if (e.target.value.length > 2) { alert('use abbr'); return;}
+                                                                  this.setState({shipState: e.target.value.toUpperCase()})} 
+                                                                } 
+                                                                disabled={this.state.isSame}
+                                      value={this.state.isSame ? this.state.billingState : this.state.shipState}/></label>
             </p>
           </fieldset>
 
           <p>
-            <button>Submit</button>
+            <button onClick={(e) => this.handleSubmit(e)}>Submit</button>
           </p>
         </form>
       </div>
